@@ -91,4 +91,24 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// get
+// /api/users/:id
+//The userDb.js helper includes an extra method called getUserPosts() that when passed a user's id, returns a list of all the posts for the user.
+router.get("/:id/posts", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const userPosts = await db.getUserPosts(userId);
+
+    if (userPosts) {
+      res.status(200).json(userPosts);
+    } else {
+      res
+        .status(404)
+        .json({ message: "This user doesn't seem to have any posts." });
+    }
+  } catch (err0r) {
+    res.status(404).json({ error: "The user's posts could not be found." });
+  }
+});
+
 module.exports = router;
