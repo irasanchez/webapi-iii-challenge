@@ -42,9 +42,8 @@ router.get("/:id", async (req, res) => {
 // insert(): calling insert passing it a resource object will add it to the database and return the new resource.
 router.post("/", async (req, res) => {
   try {
-    const post = req.body;
-    db.insert(post);
-    if (post.text && post.user_id) {
+    const post = await db.insert(req.body);
+    if (req.body.text && req.body.user_id) {
       res.status(201).json(post);
     }
   } catch (error) {
@@ -73,6 +72,23 @@ router.put("/:id", async (req, res) => {
 
 // delete
 // /api/posts/:id
-// remove(): the remove method accepts an id as it’s first parameter and, upon successfully deleting the resource from the database, returns the number of records deleted.
+// remove(): the remove method accepts an id as its first parameter and, upon successfully deleting the resource from the database, returns the number of records deleted.
+router.delete("/:id", async (req, res) => {
+  console.log(req);
+  try {
+    const postId = req.params.id;
+    const content = await db.getById(postId);
+    const post = await db.remove(postId);
+
+    if (post > 0) {
+      res
+        .status(200)
+        .json({ message: "This post has been successfully deleted" });
+    }
+  } catch (error) {
+    console.log(req.params);
+    res.status(404).json({ error: "The post could not be deleted." });
+  }
+});
 
 module.exports = router;
