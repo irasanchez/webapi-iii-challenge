@@ -7,7 +7,8 @@ const db = require("./../data/helpers/postDb");
 // get(): calling find returns a promise that resolves to an array of all the resources contained in the database.
 router.get("/", async (req, res) => {
   try {
-    res.status(200).json(req.body);
+    posts = await db.get(req.query);
+    res.status(200).json(posts);
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -86,7 +87,6 @@ router.delete("/:id", async (req, res) => {
         .json({ message: "This post has been successfully deleted" });
     }
   } catch (error) {
-    console.log(req.params);
     res.status(404).json({ error: "The post could not be deleted." });
   }
 });
