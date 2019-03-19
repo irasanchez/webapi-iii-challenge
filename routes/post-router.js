@@ -58,6 +58,18 @@ router.post("/", async (req, res) => {
 // put
 // /api/posts/:id
 // update(): accepts two arguments, the first is the id of the resource to update and the second is an object with the changes to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
+router.put("/:id", async (req, res) => {
+  try {
+    const post = await db.update(req.params.id, req.body);
+    if (req.body.text && req.body.id) {
+      res.status(200).json(req.body);
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "The post information could not be modified" });
+  }
+});
 
 // delete
 // /api/posts/:id
