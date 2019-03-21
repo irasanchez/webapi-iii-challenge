@@ -62,6 +62,7 @@ router.put("/:id", async (req, res) => {
   try {
     const post = await db.update(req.params.id, req.body);
     if (req.body.text && req.body.id) {
+      console.log(post);
       res.status(200).json(req.body);
     }
   } catch (error) {
